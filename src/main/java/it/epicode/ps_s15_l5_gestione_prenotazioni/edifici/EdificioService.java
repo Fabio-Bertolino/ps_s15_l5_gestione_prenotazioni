@@ -27,4 +27,12 @@ public class EdificioService {
     public List<Edificio>FindAll() {
         return edificioRepository.findAll();
     }
+    public Edificio createEdificio(String nome, String indirizzo, String citta) {
+        Edificio edificio = new Edificio();
+        edificio.setNome(nome);
+        edificio.setIndirizzo(indirizzo);
+        edificio.setCitta(citta);
+        edificioRepository.save(edificio);
+        return edificio;
+    }
 }

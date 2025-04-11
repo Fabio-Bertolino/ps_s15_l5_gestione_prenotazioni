@@ -1,6 +1,7 @@
 package it.epicode.ps_s15_l5_gestione_prenotazioni.postazioni;
 
 import com.github.javafaker.Faker;
+import it.epicode.ps_s15_l5_gestione_prenotazioni.edifici.Edificio;
 import it.epicode.ps_s15_l5_gestione_prenotazioni.edifici.EdificioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,5 +29,15 @@ public class PostazioneService {
     }
     public List<Postazione>FindAll(){
         return postazioneRepository.findAll();
+    }
+
+    public Postazione createPostazione(String descrizione, TipoPostazione tipoPostazione, int numeroPostiMax, Edificio edificio) {
+        Postazione postazione = new Postazione();
+        postazione.setDescrizione(descrizione);
+        postazione.setTipoPostazione(tipoPostazione);
+        postazione.setNumeroPostiMax(numeroPostiMax);
+        postazione.setEdificio(edificio);
+        postazioneRepository.save(postazione);
+        return postazione;
     }
 }

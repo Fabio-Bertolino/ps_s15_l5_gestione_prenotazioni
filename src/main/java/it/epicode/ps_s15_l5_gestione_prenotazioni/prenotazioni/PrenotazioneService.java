@@ -21,14 +21,27 @@ public class PrenotazioneService {
     @Autowired
     private Faker faker;
 
-    public void createPrenotazione(Utente utente, Postazione postazione) {
+    public void createPrenotazione(Utente utente, Postazione postazione, LocalDate data) {
         Prenotazione prenotazione = new Prenotazione();
         prenotazione.setUtente(utente);
         prenotazione.setPostazione(postazione);
-        prenotazione.setDataPrenotazione(LocalDate.now());
-        prenotazione.setScadenzaPrenotazione(LocalDate.now().plusDays(1));
-        prenotazioneRepository.save(prenotazione);
-
+        prenotazione.setDataPrenotazione(data);
+        prenotazione.setScadenzaPrenotazione(data.plusDays(1));
+        System.out.println("L'utente: " + utente.getUsername() + " ha effettuato la prenotazione per la postazione: " + postazione.getId() + " in data: " + data);
+        if (prenotazioneRepository.findByUtenteAndDataPrenotazione(utente, data).isEmpty()) {
+            if (prenotazioneRepository.findByPostazioneAndDataPrenotazione(postazione, data).size() < postazione.getNumeroPostiMax()) {
+            prenotazioneRepository.save(prenotazione);
+            System.out.println("Prenotazione effettuata con successo!");
+            System.out.println("Scadenza prenotazione: " + prenotazione.getScadenzaPrenotazione());
+            System.out.println("--------------------------------------------------");
+            } else {
+                System.out.println("Prenotazione annullata: limite posti disponibili raggiunto per la data selezionata!");
+                System.out.println("--------------------------------------------------");
+            }
+        }
+        else {
+            System.out.println("Prenotazione annullata: limite prenotazioni raggiunto per la data selezionata!");
+            System.out.println("--------------------------------------------------");
+        }
     }
-
 }
